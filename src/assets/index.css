@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    --globalBgColor: #222;
+    --globalFontColor: white;
+    background-color: var(--globalBgColor);
+    color: var(--globalFontColor);
+}
