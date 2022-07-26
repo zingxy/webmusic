@@ -18,6 +18,13 @@ const router = createRouter({
         {
             path: '/singer',
             component: () => import('@/views/Singer.vue'),
+            children: [
+                {
+                    // 路径参数
+                    path: ':id',
+                    component: () => import('@/views/SingerDetail.vue'),
+                },
+            ],
         },
         {
             path: '/search',

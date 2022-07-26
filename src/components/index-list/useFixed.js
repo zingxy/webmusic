@@ -9,28 +9,36 @@ export default function useFixed(props) {
     const offsetY = ref(0)
     // 计算现在处于哪个group
     const currentIndex = ref(0)
+    // 顶部推动效果
+    const distance = ref(0)
+    // 顶部推动效果
+
     // data变化时监听, 产看Singer.vue, ref直接改变，可以理解为请求到数据之后
     computed(() => console.log(currentIndex.value))
 
-    // const fixedTitle = ref('')
+    // 计算现在对应的的标题
     const fixedTitle = computed(() => {
+        if (offsetY.value < 0) return ''
         currentIndex.value
-        console.log('title changed')
+        // console.log('title changed')
         const currentGroup = props.data[currentIndex.value]
         return currentGroup ? currentGroup.title : ''
     })
-    // watch(currentIndex, () => {
-    //     console.log('index changed', currentIndex.value)
-    //     const currentGroup = props.data[currentIndex.value]
 
-    //     fixedTitle.value = currentGroup ? currentGroup.title : ''
-    //     console.log(fixedTitle)
-    // })
+    const fixedStyle = computed(() => {
+        // 硬编码30
+        const offset =
+            distance.value > 0 && distance.value < 30 ? distance.value - 30 : 0
+        return {
+            // 注意这里要带上单位
+            transform: `translate3d(0, ${offset}px, 0)`,
+        }
+    })
 
     watch(
         () => props.data,
         async () => {
-            /* 等待DOM更新完成 */
+            /* 等待DOM更新完成, 要拿到最新的DOM */
             await nextTick()
             calculate()
         }
@@ -48,6 +56,9 @@ export default function useFixed(props) {
             if (newY >= heightTop && newY <= heightBottom) {
                 currentIndex.value = i
                 // console.log(i)
+                // 计算下边缘和grups顶部的距离，用于实现title推动效果
+                distance.value = heightBottom - newY
+
                 break
             }
         }
@@ -58,7 +69,7 @@ export default function useFixed(props) {
      */
     function calculate() {
         /* .children可以取得该元素的直接子元素 */
-        /**
+        /** groupRef实际上拿到的是bettterscroll content dom
          * @type {Array}
          */
         const groups = Array.from(groupRef.value.children)
@@ -88,5 +99,7 @@ export default function useFixed(props) {
         offsetY,
         listHeights,
         fixedTitle,
+        fixedStyle,
+        distance,
     }
 }

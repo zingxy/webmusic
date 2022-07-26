@@ -7,6 +7,9 @@ const baseURL = 'http://localhost:9002'
 axios.defaults.baseURL = baseURL
 
 export function get(url, params) {
+    // debugger
+
+    // console.log('params', params)
     return axios
         .get(url, {
             params,

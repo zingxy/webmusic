@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-    <div class="__header flex justify-center items-center">
+    <div class="__header h-10 flex justify-center items-center">
         <span
             class="__icon inline-block w-8 h-8 font-[0px] align-middle"
         ></span>
